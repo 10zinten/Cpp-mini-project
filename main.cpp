@@ -24,6 +24,7 @@ int main()
 {
 
    int opt;
+   cout<<"lkfjasdlkjaskdjfssl"<<endl;
    cout<<"Media Player :"<<endl;
    cout<<"1.Play Video\n2.Play Audio\n: ";
    cin>>opt;
