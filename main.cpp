@@ -50,6 +50,15 @@ void Music::diskOut()
     outfile.write( (char*)this, sizeof(*this) );
 }
 
+int Music::diskCount()
+{
+    ifstream infile;
+    infile.open("SONGSLIB.DAT", ios::binary );
+    infile.seekg(0, ios::end );
+
+    return (int)infile.tellg() / sizeof(Music);
+}
+
 int main()
 {
    Music m;
