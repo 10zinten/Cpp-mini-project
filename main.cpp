@@ -17,6 +17,7 @@ class Music
 public:
     void playMedia()
     {
+         audioHtml(title);
          ShellExecute(NULL, "open", "audio.html",
             NULL, NULL, SW_SHOWNORMAL);
     }
@@ -39,6 +40,7 @@ public:
 
 void Music::diskIn(int mn)
 {
+    cout<<"Read song from Disk";
     ifstream infile;
     infile.open("SONGSLIB.DAT", ios::binary);
     infile.seekg( mn*sizeof(Music) );
@@ -47,6 +49,7 @@ void Music::diskIn(int mn)
 
 void Music::diskOut()
 {
+    cout<<"Saving song in disk";
     ofstream outfile;
     outfile.open("SONGSLIB.DAT", ios::app | ios::binary);
     outfile.write( (char*)this, sizeof(*this) );
@@ -64,6 +67,9 @@ int Music::diskCount()
 int main()
 {
    Music m;
+   m.addMusic();
+   m.diskOut();
+   m.diskOut();
    m.playMedia();
    return 0;
 }
