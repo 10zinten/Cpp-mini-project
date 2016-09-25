@@ -4,6 +4,8 @@
 #include<fstream>
 using namespace std;
 
+#include "utils/html.h"
+
 class Music
 {
     char title[20];
