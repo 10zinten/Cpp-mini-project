@@ -28,7 +28,27 @@ public:
         cout<<"Genera : "; gets(genera);
         cout<<"Duration : "; cin>>duration;
     }
+
+    void diskIn(int);
+    void diskOut();
+    static int diskCount();
+
 };
+
+void Music::diskIn(int mn)
+{
+    ifstream infile;
+    infile.open("SONGSLIB.DAT", ios::binary);
+    infile.seekg( mn*sizeof(Music) );
+    infile.read( (char *)this, sizeof(*this) );
+}
+
+void Music::diskOut()
+{
+    ofstream outfile;
+    outfile.open("SONGSLIB.DAT", ios::app | ios::binary);
+    outfile.write( (char*)this, sizeof(*this) );
+}
 
 int main()
 {
