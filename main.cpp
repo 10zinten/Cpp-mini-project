@@ -15,7 +15,7 @@ class Music
 public:
     void playMedia()
     {
-         ShellExecute(NULL, "open", "video.html",
+         ShellExecute(NULL, "open", "audio.html",
             NULL, NULL, SW_SHOWNORMAL);
     }
 
