@@ -1,6 +1,6 @@
 #include<iostream>
 #include <windows.h>
-#include<string>
+#include<cstring>
 #include<fstream>
 using namespace std;
 
@@ -15,9 +15,12 @@ class Music
     int duration;
 
 public:
+    Music():title(), artist(), album(), genre(), duration(0)
+    { }
+
     void playMedia()
     {
-         cout<<"Now playing )))) ";
+         cout<<"Now playing  ~~~)) ";
          audioHtml(title);
          ShellExecute(NULL, "open", "audio.html",
             NULL, NULL, SW_SHOWNORMAL);
@@ -26,11 +29,11 @@ public:
     void addMusic()
     {
         cout<<"Add Details of your favorite Music : "<<endl;
-        cout<<"Title : "; gets(title);
-        cout<<"Artist : "; gets(artist);
-        cout<<"Album : "; gets(album);
-        cout<<"Genre : "; gets(genre);
-        cout<<"Duration : "; cin>>duration;
+        cout<<"Title : "; cin.get(title, 20); cin.ignore(1, '\n');
+        cout<<"Artist : "; cin.get(artist, 20); cin.ignore(1, '\n');
+        cout<<"Album : "; cin.get(album, 40); cin.ignore(1, '\n');
+        cout<<"Genre : "; cin>>genre; cin.ignore(1, '\n');
+        cout<<"Duration : "; cin>>duration; cin.ignore(1, '\n');
     }
 
     void DisplayMusic()
@@ -39,7 +42,7 @@ public:
         cout<<"Artist : "<<artist<<endl;
         cout<<"Album : "<<album<<endl;
         cout<<"Genera : "<<genre<<endl;
-        cout<<"Duration : "<<duration<<endl;
+        cout<<"Duration : "<<duration<<"mins\n"<<endl;
     }
     void diskIn(int);
     void diskOut();
@@ -76,12 +79,25 @@ int Music::diskCount()
 int main()
 {
    Music m;
-   m.addMusic();
-   m.diskOut();
-   m.diskOut();
-   m.DisplayMusic();
-   m.playMedia();
+   char ch;
+
+   do
+   {
+       m.addMusic();
+       m.diskOut();
+       cout<<"Add another song (y/n) : ";
+       cin>>ch; cin.ignore(1, '\n');
+   } while(ch == 'y');
+
    int n = Music::diskCount();
-   cout<<n<<"musics are added "<<endl;
+   for(int i=0; i<n; i++)
+   {
+       cout<<"Music "<<i+1<<endl;
+       m.diskIn(i);
+       m.DisplayMusic();
+   }
+   cout<<endl;
+   m.playMedia();
+
    return 0;
 }
