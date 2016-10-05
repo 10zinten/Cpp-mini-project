@@ -1,11 +1,14 @@
 #include<iostream>
-#include <windows.h>
+#include<windows.h>
 #include<fstream>
-#include<string.h>
+#include<string>
 #include<stdlib.h>
+#include<sstream>
+#include<regex>
 using namespace std;
 
 #include "utils/html.h"
+#include "utils/random.h"
 
 class Music
 {
@@ -28,22 +31,20 @@ public:
         cout<<"Album : "<<album<<endl;
         cout<<"Genera : "<<genre<<endl;
         cout<<"Duration : "<<duration<<"mins\n"<<endl;
-        cout<<"Songs id : "<<song_id<<endl;
-        cout<<"Artist id : "<<artist_id<<endl;
-        cout<<"Album id : "<<album_id<<endl;
-        cout<<"Genre id : "<<genre_id<<endl;
     }
 
-    void playMedia()
+    void playMedia(string id)
     {
-         cout<<"Now playing  ~~~)) ";
-         audioHtml(id);
-         ShellExecute(NULL, "open", "audio.html",
-            NULL, NULL, SW_SHOWNORMAL);
+        cout<<"Now playing  ~~~)) ";
+        audioHtml(id);
+        ShellExecute(NULL, "open", "audio.html",
+        NULL, NULL, SW_SHOWNORMAL);
     }
 
-    virtual void showSongs(ifstream& infile, string n)
+    virtual void showSongs(string fName, string n)
         {
+            cout<<"###### LIST OF SONGS #######";
+            ifstream infile("files/" + fName, ios::in);
             char ch;
             string title;
             n = "^&" + n;
@@ -66,9 +67,12 @@ public:
             }
         }
 
-        virtual listing(ifstream& infile)
+        virtual void listing(string fName)
         {
+            ifstream infile("files/" + fName, ios::in);
             string name;
+            if(!infile)
+            { cout<<"Error , can not open the file !!!!!"; exit(0);}
             while(infile)
             {
                 getline(infile, name);
@@ -79,144 +83,153 @@ public:
 
 class Artist : public Music
 {
+    string artistFile;
+
 public:
-    void listing()
+    void listing(string aName)
     {
-         ifstream infile("Artist.txt", ios::in);
-        Music::listing(infile);
+        artistFile = "artist.txt";
+        cout<<"###### LIST OF ARTIST #######"<<endl;
+        Music::listing(artistFile);
     }
 
-    void showSongs(string n)
+    void showSongs(string sName, string n)
     {
-        string n;
-        ifstream infile("sArtist.txt", ios::in);
-        Music::showSongs(infile, n);
-        }
+        Music::showSongs(sName, n);
     }
 };
+
 
 class Album : public Music
 {
+    string albumFile;
+
 public:
-    void listing()
+      void listing(string lable)
     {
-        ifstream infile("Ablum.txt", ios::in);
-        Music::listing(infile);
+        albumFile = "album.txt";
+        cout<<"###### LIST OF ALBUM #######"<<endl;
+        Music::listing(albumFile);
     }
 
-    void showSongs(string n)
+    void showSongs(string sName, string n)
     {
-        string n;
-        ifstream infile("sAlbum.txt", ios::in);
-        Music::showSongs(infile, n);
+        Music::showSongs(sName, n);
     }
 };
 
-class Genre
+class Genre : public Music
 {
+    string genreFile;
 public:
-     void listing()
+      void listing(string label)
     {
-        ifstream infile("Genre.txt", ios::in);
-        Music::listing(infile);
+        genreFile = "genre.txt";
+        cout<<"###### LIST OF GENRE #######"<<endl;
+        Music::listing(genreFile);
     }
 
-    void showSongs(string n)
+    void showSongs(string sName, string n)
     {
-        string n;
-        ifstream infile("sAlbum.txt", ios::in);
-        cout<<"Album no : ";
-        cin>>n;
-        Music::showSongs(infile, n);
+        Music::showSongs(sName, n);
     }
 };
+
+string intToString()
+{
+    ostringstream temp;
+    temp<<random();
+
+    return temp.str();
+}
 
 int main()
 {
-  Music m;
-  char ch;
-  int n;
-  int opt;
+    Music* m;
+    char ch;
+    int n;
+    int opt;
+    string id;
 
-    cout<<"------- MUSIC APPLICATION ----------"<<endl;
-    cout<<"\n1.Listen now"
-          "\n2.Music Library"
-          "\n3.Add Songs"
-          "\n: ";
-    cin>> opt; cin.ignore(15, '\n');
-    switch(opt)
+    do
     {
-        int opt1, artist, album, songs, genre;
-        case 1: system("cls"); cout<<"Now playing "; break;
-        case 2: system("cls");
-                cout<<"----- Musics Library --------"<<endl;
-                cout<<"\n1.Artist"
-                      "\n2.Album"
-                      "\n3.Songs"
-                      "\n4.Genre"
-                      "\n:";
-                cin>>opt1; cin.ignore(1, '\n');
-                switch(opt1)
-                {
-                    case 1: system("cls");
-                            cout<<"Showing list of Artist"<<endl;
-                            cout<<"Choose Artist : "<<endl;
-                            cin>>artist;
-                            cout<<"Showing list of the songs"<<endl;
-                            cin>>songs;
-                            cout<<"Playing songs !!!"<<endl;
-                            break;
+        system("cls");
+        cout<<"\n@@@@@@@@@ MUSIC PLAYER @@@@@@@@"<<endl;
+        cout<<"\n\n1.Listen now"
+              "\n\n2.Music Library"
+              "\n: ";
+        cin>> opt; cin.ignore(15, '\n');
+        switch(opt)
+        {
+            case 1: system("cls");
+                    cout<<"Now playing ";
+                    id = intToString();
+                    m->playMedia(id);
+                    break;
+            case 2: system("cls");
+                    cout<<"\n@@@@@@@@@ MUSIC LIBRARY @@@@@@@@"<<endl;
+                    cout<<"\n1.ARTIST"
+                          "\n2.ALBUM"
+                          "\n3.SONGS"
+                          "\n4.GENRE"
+                          "\n:";
+                    cin>>opt; cin.ignore(1, '\n');
+                    switch(opt)
+                    {
+                        case 1: system("cls");
+                                m = new Artist;
+                                m->listing("artist");
+                                cout<<"\nArtist no : ";
+                                cin>>id;
+                                system("cls");
+                                m->showSongs("sArtist.txt", id);
+                                cout<<"\n\nSong no : ";
+                                cin>>id;
+                                m->playMedia(id);
+                                break;
 
-                    case 2: system("cls");
-                            cout<<"Showing list of Album"<<endl;
-                            cout<<"Choose Album : "<<endl;
-                            cin>>artist;
-                            cout<<"Showing list of the songs"<<endl;
-                            cin>>songs;
-                            cout<<"Playing songs !!!"<<endl;
-                            break;
+                        case 2: system("cls");
+                                m = new Album;
+                                m->listing("album");
+                                cout<<"\nAlbum no : ";
+                                cin>>id;
+                                system("cls");
+                                m->showSongs("sAlbum.txt", id);
+                                cout<<"\n\nSong no : ";
+                                cin>>id;
+                                m->playMedia(id);
+                                break;
 
-                    case 3: system("cls");
-                            cout<<"Showing list of the songs"<<endl;
-                            cin>>songs;
-                            cout<<"Playing songs !!!"<<endl;
-                            break;
+                        case 3: system("cls");
+                                cout<<"#### SONGS #####";
+                                m->listing("songs.txt");
+                                cout<<"Song no :";
+                                cin>>id;
+                                m->playMedia(id);
+                                break;
 
-                    case 4: system("cls");
-                            cout<<"Showing list of Genre"<<endl;
-                            cout<<"Choose Genre : "<<endl;
-                            cin>>artist;
-                            cout<<"Showing list of the songs"<<endl;
-                            cin>>songs;
-                            cout<<"Playing songs !!!"<<endl;
-                            break;
+                        case 4: system("cls");
+                                m = new Genre;
+                                m->listing("genre.txt");
+                                cout<<"\nGenre no : ";
+                                cin>>id;
+                                system("cls");
+                                m->showSongs("sGenre.txt", id);
+                                cout<<"\n\nSong no : ";
+                                cin>>id;
+                                m->playMedia(id);
+                                break;
 
-                    default: cout<<"Invalid Choice !!! ";
-                             break;
-                }
-                break;
+                        default: cout<<"Invalid Choice !!! ";
+                                 break;
+                    }
+                    break;
 
-        case 3: system("cls");
-                cout<<"Add Your favorite Musics ";
-                do
-                {
-                    m.addMusic();
-                   cout<<"Add another song (y/n) : ";
-                   cin>>ch; cin.ignore(1, '\n');
-                } while(ch == 'y');
-
-                n = Music::diskCount();
-                for(int i=0; i<n; i++)
-                {
-                   cout<<"Music "<<i+1<<endl;
-                   m.diskIn(i);
-                   m.putMusic();
-                }
-                break;
-
-        default: cout<<"Invalid Choice !!! ";
-                 break;
-    }
-
+            default: cout<<"Invalid Choice !!! ";
+                     break;
+        }
+        cout<<"\n\nPlay another songs(y/n) :";
+        cin>>ch; cin.ignore('1', '\n');
+    } while(ch == 'y' || ch == 'Y');
    return 0;
 }

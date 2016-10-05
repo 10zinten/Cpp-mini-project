@@ -1,0 +1,21 @@
+1.Hello, Adele, 25
+2.See you again, Wiz Khalifa, 
+3.Love your self,  Justin Bieber, Purpose
+4.Rolling in the Deep, Adele, 25
+
+5.Back in Black, AC/DC, Heavy Metal
+6.American Idiot, Greenday, 21st Century Breakdown
+7.Sweet child of mine, Guns N' roses, Appetite for Destruction
+8.21 guns, Greenday, 21st Century Breakdown
+9.Know Your Enemy, Greenday, 21st Century Breakdown
+10.Highway to Hell, AC/DC, Heavy Metal
+
+country
+11.whiskey lullaby, Brad Paisley, Nud on the tires
+12.Back to December, Taylor swift, Speak Now
+13.Love story, Taylor Swift, Fearless
+
+Bolloywood
+14.Tum Hi Ho, Arjit Singh, Aashiqui 2
+15.Jeena jeena, Atif Aslam, Badlapur
+15.
